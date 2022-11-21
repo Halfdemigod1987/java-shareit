@@ -22,6 +22,7 @@ public class ItemServiceImpl implements ItemService {
 
     private final ItemRepository itemRepository;
     private final UserRepository userRepository;
+
     @Override
     public List<Item> findAllItems(int userId) {
         userRepository.findById(userId)

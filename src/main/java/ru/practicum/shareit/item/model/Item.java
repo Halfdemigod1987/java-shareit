@@ -19,6 +19,7 @@ public class Item {
     private boolean available;
     private ItemRequest request;
     private User owner;
+
     public void setId() {
         id = ITEM_ID.incrementAndGet();
     }

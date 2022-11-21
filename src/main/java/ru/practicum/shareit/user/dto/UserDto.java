@@ -6,6 +6,7 @@ import lombok.extern.jackson.Jacksonized;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
+
 @Value
 @AllArgsConstructor
 @Jacksonized

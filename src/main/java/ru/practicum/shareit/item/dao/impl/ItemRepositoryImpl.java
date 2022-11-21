@@ -13,6 +13,7 @@ import java.util.Optional;
 public class ItemRepositoryImpl implements ItemRepository {
 
     private final HashMap<Integer, Item> items = new HashMap<>();
+
     @Override
     public List<Item> findAll() {
         return new ArrayList<>(items.values());
