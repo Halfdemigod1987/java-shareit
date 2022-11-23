@@ -3,6 +3,8 @@ package ru.practicum.shareit.user.services.impl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.user.dao.UserRepository;
+import ru.practicum.shareit.user.dto.UserDto;
+import ru.practicum.shareit.user.dto.mappers.UserMapper;
 import ru.practicum.shareit.user.exceptions.DuplicateEmailException;
 import ru.practicum.shareit.user.exceptions.NotFoundUserException;
 import ru.practicum.shareit.user.model.User;
@@ -10,31 +12,40 @@ import ru.practicum.shareit.user.services.UserService;
 
 import java.util.List;
 import java.util.Map;
+import java.util.stream.Collectors;
 
 @Service
 @RequiredArgsConstructor
 public class UserServiceImpl implements UserService {
     private final UserRepository userRepository;
+    private final UserMapper userMapper = UserMapper.INSTANCE;
 
     @Override
-    public List<User> findAllUsers() {
-        return userRepository.findAll();
+    public List<UserDto> findAllUsers() {
+        return userRepository
+                .findAll()
+                .stream()
+                .map(userMapper::userToUserDto)
+                .collect(Collectors.toList());
     }
 
     @Override
-    public User findUserById(int id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> new NotFoundUserException(String.format("User with id = %d not found", id)));
+    public UserDto findUserById(int id) {
+        return userMapper.userToUserDto(
+                userRepository.findById(id)
+                        .orElseThrow(() -> new NotFoundUserException(String.format("User with id = %d not found", id))));
     }
 
     @Override
-    public User createUser(User user) {
+    public UserDto createUser(UserDto userDto) {
+        User user = userMapper.userDtoToUser(userDto);
         validateUser(user);
-        return userRepository.create(user);
+        return userMapper.userToUserDto(
+                userRepository.create(user));
     }
 
     @Override
-    public User partialUpdate(int id, Map<String, String> updates) {
+    public UserDto partialUpdate(int id, Map<String, String> updates) {
         User oldUser = userRepository.findById(id)
                 .orElseThrow(() -> new NotFoundUserException(String.format("User with id = %d not found", id)));
         User user = new User();
@@ -52,7 +63,8 @@ public class UserServiceImpl implements UserService {
         });
 
         validateUser(user);
-        return userRepository.update(id, user);
+        return userMapper.userToUserDto(
+                userRepository.update(id, user));
     }
 
     private void validateUser(User user) {

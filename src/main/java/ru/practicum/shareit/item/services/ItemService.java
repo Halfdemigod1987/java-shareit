@@ -1,20 +1,20 @@
 package ru.practicum.shareit.item.services;
 
-import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.item.dto.ItemDto;
 
 import java.util.List;
 import java.util.Map;
 
 public interface ItemService {
-    List<Item> findAllItems(int userId);
+    List<ItemDto> findAllItems(int userId);
 
-    Item findItemById(int id);
+    ItemDto findItemById(int id);
 
-    Item createItem(Item item, int userId);
+    ItemDto createItem(ItemDto itemDto, int userId);
 
-    Item partialUpdate(int id, Map<String, String> updates, int userId);
+    ItemDto partialUpdate(int id, Map<String, String> updates, int userId);
 
     void deleteItem(int id);
 
-    List<Item> searchItems(String text, int userId);
+    List<ItemDto> searchItems(String text, int userId);
 }
