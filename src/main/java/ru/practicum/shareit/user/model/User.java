@@ -3,19 +3,18 @@ package ru.practicum.shareit.user.model;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
 
-import java.util.concurrent.atomic.AtomicInteger;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "users")
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class User {
-    private static AtomicInteger USER_ID = new AtomicInteger();
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private int id;
     private String name;
+    @Column(unique = true)
     private String email;
-
-    public void setId() {
-        id = USER_ID.incrementAndGet();
-    }
 }

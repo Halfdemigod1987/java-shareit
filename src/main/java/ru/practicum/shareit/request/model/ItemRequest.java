@@ -4,21 +4,22 @@ import lombok.Data;
 import lombok.EqualsAndHashCode;
 import ru.practicum.shareit.user.model.User;
 
+import javax.persistence.*;
 import java.time.LocalDateTime;
-import java.util.concurrent.atomic.AtomicInteger;
 
+@Entity
+@Table(name = "requests")
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class ItemRequest {
-    private static AtomicInteger REQUEST_ID = new AtomicInteger();
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private int id;
     private String description;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "requestor_id", referencedColumnName = "id")
     private User requestor;
+    @Transient
     private LocalDateTime created;
-
-    public void setId() {
-        id = REQUEST_ID.incrementAndGet();
-    }
 }

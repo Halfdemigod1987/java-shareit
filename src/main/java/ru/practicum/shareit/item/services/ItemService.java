@@ -1,14 +1,17 @@
 package ru.practicum.shareit.item.services;
 
+import ru.practicum.shareit.item.dto.CommentDto;
+import ru.practicum.shareit.item.dto.CommentReturnDto;
 import ru.practicum.shareit.item.dto.ItemDto;
+import ru.practicum.shareit.item.dto.ItemReturnDto;
 
 import java.util.List;
 import java.util.Map;
 
 public interface ItemService {
-    List<ItemDto> findAllItems(int userId);
+    List<ItemReturnDto> findAllItems(int userId);
 
-    ItemDto findItemById(int id);
+    ItemReturnDto findItemById(int id, int userId);
 
     ItemDto createItem(ItemDto itemDto, int userId);
 
@@ -17,4 +20,6 @@ public interface ItemService {
     void deleteItem(int id);
 
     List<ItemDto> searchItems(String text, int userId);
+
+    CommentReturnDto createComment(int itemId, CommentDto commentDto, int userId);
 }

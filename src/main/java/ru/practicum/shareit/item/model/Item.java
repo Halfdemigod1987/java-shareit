@@ -5,23 +5,26 @@ import lombok.EqualsAndHashCode;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.model.User;
 
-import java.util.concurrent.atomic.AtomicInteger;
+import javax.persistence.*;
 
+@Entity
+@Table(name = "items")
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Item {
-    private static AtomicInteger ITEM_ID = new AtomicInteger();
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private int id;
     private String name;
     private String description;
+    @Column(name = "is_available")
     private boolean available;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "request_id", referencedColumnName = "id")
     private ItemRequest request;
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "owner_id", referencedColumnName = "id")
     private User owner;
-
-    public void setId() {
-        id = ITEM_ID.incrementAndGet();
-    }
 
 }
