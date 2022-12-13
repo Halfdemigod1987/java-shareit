@@ -2,10 +2,12 @@ package ru.practicum.shareit.item.model;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.model.User;
 
 import javax.persistence.*;
+import java.util.Set;
 
 @Entity
 @Table(name = "items")
@@ -26,5 +28,9 @@ public class Item {
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id", referencedColumnName = "id")
     private User owner;
+    @OneToMany(mappedBy = "item")
+    private Set<Booking> bookings;
+    @OneToMany(mappedBy = "item")
+    private Set<Comment> comments;
 
 }

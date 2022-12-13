@@ -34,8 +34,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public BookingReturnDto createBooking(BookingDto bookingDto, int userId) {
-        User booker = userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundUserException(String.format("User with id = %d not found", userId)));
+        User booker = findUser(userId);
         if (bookingDto.getEnd().isBefore(bookingDto.getStart())) {
             throw new IllegalArgumentException("End of the booking cannot be before start");
         }
@@ -60,8 +59,7 @@ public class BookingServiceImpl implements BookingService {
     public BookingReturnDto changeBookingStatus(int bookingId, boolean approved, int userId) {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new NotFoundBookingException(String.format("Booking with id = %d not found", bookingId)));
-        userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundUserException(String.format("User with id = %d not found", userId)));
+        findUser(userId);
         if (booking.getItem().getOwner().getId() != userId) {
             throw new AccessDeniedException(String.format("User with id = %d is not owner of the item %s",
                     userId, booking.getItem().getName()));
@@ -91,8 +89,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public List<BookingReturnDto> findAllBookings(String state, int userId) {
-        userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundUserException(String.format("User with id = %d not found", userId)));
+        findUser(userId);
         Sort sort = Sort.by(Sort.Direction.DESC, "start");
         List<Booking> bookings;
         switch (state) {
@@ -129,8 +126,7 @@ public class BookingServiceImpl implements BookingService {
 
     @Override
     public List<BookingReturnDto> findAllOwnerBookings(String state, int userId) {
-        userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundUserException(String.format("User with id = %d not found", userId)));
+        findUser(userId);
         Sort sort = Sort.by(Sort.Direction.DESC, "start");
         List<Booking> bookings;
         switch (state) {
@@ -165,5 +161,9 @@ public class BookingServiceImpl implements BookingService {
                 .collect(Collectors.toList());
     }
 
+    private User findUser(int userId) {
+        return userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundUserException(String.format("User with id = %d not found", userId)));
+    }
 
 }

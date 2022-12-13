@@ -44,8 +44,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemReturnDto> findAllItems(int userId) {
-        userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundUserException(String.format("User with id = %d not found", userId)));
+        findUser(userId);
         return itemRepository.findByOwner_Id(userId, Sort.by(Sort.Direction.ASC, "id")).stream()
                 .map(itemMapper::itemToItemReturnDto)
                 .peek(itemReturnDto -> fillItemReturn(itemReturnDto, userId))
@@ -72,10 +71,6 @@ public class ItemServiceImpl implements ItemService {
             itemDto.setLastBooking(bookingMapper.bookingToBookingItemReturnDto(lastBooking));
             itemDto.setNextBooking(bookingMapper.bookingToBookingItemReturnDto(nextBooking));
         }
-        List<Comment> comments = commentRepository.findByItem_Id(itemDto.getId(), Sort.by(Sort.Direction.ASC, "created"));
-        itemDto.setComments(comments.stream()
-                .map(commentMapper::commentToCommentReturnDto)
-                .collect(Collectors.toList()));
     }
 
     @Override
@@ -134,8 +129,7 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     public List<ItemDto> searchItems(String text, int userId) {
-        userRepository.findById(userId)
-                .orElseThrow(() -> new NotFoundUserException(String.format("User with id = %d not found", userId)));
+        findUser(userId);
 
         if (text.isEmpty()) {
             return new ArrayList<>();
@@ -164,4 +158,10 @@ public class ItemServiceImpl implements ItemService {
         return commentMapper.commentToCommentReturnDto(
                 commentRepository.save(comment));
     }
+
+    private void findUser(int userId) {
+        userRepository.findById(userId)
+                .orElseThrow(() -> new NotFoundUserException(String.format("User with id = %d not found", userId)));
+    }
+
 }

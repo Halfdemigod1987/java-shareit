@@ -31,8 +31,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto findUserById(int id) {
         return userMapper.userToUserDto(
-                userRepository.findById(id)
-                        .orElseThrow(() -> new NotFoundUserException(String.format("User with id = %d not found", id))));
+                findUser(id));
     }
 
     @Override
@@ -44,8 +43,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public UserDto partialUpdate(int id, Map<String, String> updates) {
-        User oldUser = userRepository.findById(id)
-                .orElseThrow(() -> new NotFoundUserException(String.format("User with id = %d not found", id)));
+        User oldUser = findUser(id);
         User user = new User();
         user.setId(oldUser.getId());
         user.setName(oldUser.getName());
@@ -66,8 +64,13 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public void deleteUser(int id) {
-        User user = userRepository.findById(id)
-                .orElseThrow(() -> new NotFoundUserException(String.format("User with id = %d not found", id)));
+        User user = findUser(id);
         userRepository.delete(user);
     }
+
+    private User findUser(int id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundUserException(String.format("User with id = %d not found", id)));
+    }
+
 }

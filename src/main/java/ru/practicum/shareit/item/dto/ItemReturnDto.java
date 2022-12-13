@@ -23,6 +23,5 @@ public class ItemReturnDto {
     private BookingItemReturnDto lastBooking;
     private BookingItemReturnDto nextBooking;
     private List<CommentReturnDto> comments;
-
     private int ownerId;
 }

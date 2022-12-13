@@ -2,10 +2,12 @@ package ru.practicum.shareit.request.model;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
 import javax.persistence.*;
 import java.time.LocalDateTime;
+import java.util.Set;
 
 @Entity
 @Table(name = "requests")
@@ -22,4 +24,6 @@ public class ItemRequest {
     private User requestor;
     @Transient
     private LocalDateTime created;
+    @OneToMany(mappedBy = "request")
+    private Set<Item> items;
 }
