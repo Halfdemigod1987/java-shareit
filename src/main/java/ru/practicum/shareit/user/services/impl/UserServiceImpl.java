@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import ru.practicum.shareit.user.dao.UserRepository;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.dto.mappers.UserMapper;
-import ru.practicum.shareit.user.exceptions.DuplicateEmailException;
 import ru.practicum.shareit.user.exceptions.NotFoundUserException;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.services.UserService;
@@ -32,22 +31,19 @@ public class UserServiceImpl implements UserService {
     @Override
     public UserDto findUserById(int id) {
         return userMapper.userToUserDto(
-                userRepository.findById(id)
-                        .orElseThrow(() -> new NotFoundUserException(String.format("User with id = %d not found", id))));
+                findUser(id));
     }
 
     @Override
     public UserDto createUser(UserDto userDto) {
         User user = userMapper.userDtoToUser(userDto);
-        validateUser(user);
         return userMapper.userToUserDto(
-                userRepository.create(user));
+                userRepository.save(user));
     }
 
     @Override
     public UserDto partialUpdate(int id, Map<String, String> updates) {
-        User oldUser = userRepository.findById(id)
-                .orElseThrow(() -> new NotFoundUserException(String.format("User with id = %d not found", id)));
+        User oldUser = findUser(id);
         User user = new User();
         user.setId(oldUser.getId());
         user.setName(oldUser.getName());
@@ -62,23 +58,19 @@ public class UserServiceImpl implements UserService {
             }
         });
 
-        validateUser(user);
         return userMapper.userToUserDto(
-                userRepository.update(id, user));
-    }
-
-    private void validateUser(User user) {
-        boolean duplicateEmail = userRepository.findAll().stream()
-                .anyMatch(otherUser -> (!otherUser.getEmail().isBlank()
-                        && otherUser.getId() != user.getId())
-                        && (otherUser.getEmail().equals(user.getEmail())));
-        if (duplicateEmail) {
-            throw new DuplicateEmailException(String.format("Email %s is already used", user.getEmail()));
-        }
+                userRepository.save(user));
     }
 
     @Override
     public void deleteUser(int id) {
-        userRepository.delete(id);
+        User user = findUser(id);
+        userRepository.delete(user);
     }
+
+    private User findUser(int id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> new NotFoundUserException(String.format("User with id = %d not found", id)));
+    }
+
 }

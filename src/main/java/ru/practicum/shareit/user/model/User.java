@@ -2,20 +2,32 @@ package ru.practicum.shareit.user.model;
 
 import lombok.Data;
 import lombok.EqualsAndHashCode;
+import ru.practicum.shareit.booking.model.Booking;
+import ru.practicum.shareit.item.model.Comment;
+import ru.practicum.shareit.item.model.Item;
+import ru.practicum.shareit.request.model.ItemRequest;
 
-import java.util.concurrent.atomic.AtomicInteger;
+import javax.persistence.*;
+import java.util.Set;
 
+@Entity
+@Table(name = "users")
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class User {
-    private static AtomicInteger USER_ID = new AtomicInteger();
-
+    @Id
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
     @EqualsAndHashCode.Include
     private int id;
     private String name;
+    @Column(unique = true)
     private String email;
-
-    public void setId() {
-        id = USER_ID.incrementAndGet();
-    }
+    @OneToMany(mappedBy = "requestor")
+    private Set<ItemRequest> itemRequests;
+    @OneToMany(mappedBy = "booker")
+    private Set<Booking> bookings;
+    @OneToMany(mappedBy = "author")
+    private Set<Comment> comments;
+    @OneToMany(mappedBy = "owner")
+    private Set<Item> items;
 }

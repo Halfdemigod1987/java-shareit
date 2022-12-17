@@ -11,8 +11,9 @@ import javax.validation.constraints.NotBlank;
 @AllArgsConstructor
 @Jacksonized
 public class UserDto {
-    int id;
-    String name;
+    private int id;
+    private String name;
     @Email
-    @NotBlank String email;
+    @NotBlank
+    private String email;
 }
