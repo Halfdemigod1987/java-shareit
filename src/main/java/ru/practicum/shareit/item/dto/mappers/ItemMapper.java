@@ -12,10 +12,9 @@ import ru.practicum.shareit.item.model.Item;
 public interface ItemMapper {
     ItemMapper INSTANCE = Mappers.getMapper(ItemMapper.class);
 
-    ItemDto itemToItemDto(Item item);
-
     Item itemDtoToItem(ItemDto itemDto);
 
     @Mapping(source = "owner.id", target = "ownerId")
+    @Mapping(source = "request.id", target = "requestId")
     ItemReturnDto itemToItemReturnDto(Item item);
 }

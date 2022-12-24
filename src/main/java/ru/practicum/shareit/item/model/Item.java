@@ -1,7 +1,6 @@
 package ru.practicum.shareit.item.model;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.model.User;
@@ -12,7 +11,10 @@ import java.util.Set;
 @Entity
 @Table(name = "items")
 @Data
+@Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@AllArgsConstructor
+@NoArgsConstructor
 public class Item {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -27,6 +29,7 @@ public class Item {
     private ItemRequest request;
     @ManyToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "owner_id", referencedColumnName = "id")
+    @ToString.Exclude
     private User owner;
     @OneToMany(mappedBy = "item")
     private Set<Booking> bookings;

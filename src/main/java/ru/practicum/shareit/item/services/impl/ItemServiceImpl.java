@@ -1,6 +1,8 @@
 package ru.practicum.shareit.item.services.impl;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
 import ru.practicum.shareit.booking.dao.BookingRepository;
@@ -20,6 +22,9 @@ import ru.practicum.shareit.item.exceptions.NotOwnerException;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.services.ItemService;
+import ru.practicum.shareit.request.dao.ItemRequestRepository;
+import ru.practicum.shareit.request.exceptions.NotFoundItemRequestException;
+import ru.practicum.shareit.request.model.ItemRequest;
 import ru.practicum.shareit.user.dao.UserRepository;
 import ru.practicum.shareit.user.exceptions.NotFoundUserException;
 import ru.practicum.shareit.user.model.User;
@@ -38,14 +43,22 @@ public class ItemServiceImpl implements ItemService {
     private final UserRepository userRepository;
     private final BookingRepository bookingRepository;
     private final CommentRepository commentRepository;
+    private final ItemRequestRepository itemRequestRepository;
     private final ItemMapper itemMapper = ItemMapper.INSTANCE;
     private final BookingMapper bookingMapper = BookingMapper.INSTANCE;
     private final CommentMapper commentMapper = CommentMapper.INSTANCE;
 
     @Override
-    public List<ItemReturnDto> findAllItems(int userId) {
+    public List<ItemReturnDto> findAllItems(int userId, Integer from, Integer size) {
         findUser(userId);
-        return itemRepository.findByOwner_Id(userId, Sort.by(Sort.Direction.ASC, "id")).stream()
+        Pageable pageable;
+        if (size == null) {
+            pageable = PageRequest.of(0, Integer.MAX_VALUE, Sort.by(Sort.Direction.ASC, "id"));
+        } else {
+            pageable = PageRequest.of(from / size, size, Sort.by(Sort.Direction.ASC, "id"));
+        }
+        return itemRepository.findByOwner_Id(userId, pageable)
+                .stream()
                 .map(itemMapper::itemToItemReturnDto)
                 .peek(itemReturnDto -> fillItemReturn(itemReturnDto, userId))
                 .collect(Collectors.toList());
@@ -74,17 +87,23 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public ItemDto createItem(ItemDto itemDto, int userId) {
+    public ItemReturnDto createItem(ItemDto itemDto, int userId) {
         User applicant = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundUserException(String.format("User with id = %d not found", userId)));
         Item item = itemMapper.itemDtoToItem(itemDto);
         item.setOwner(applicant);
-        return itemMapper.itemToItemDto(
+        if (itemDto.getRequestId() != null) {
+            ItemRequest itemRequest = itemRequestRepository.findById(itemDto.getRequestId()).orElseThrow(
+                    () -> new NotFoundItemRequestException(String.format("Request with id = %d not found", itemDto.getRequestId()))
+            );
+            item.setRequest(itemRequest);
+        }
+        return itemMapper.itemToItemReturnDto(
                 itemRepository.save(item));
     }
 
     @Override
-    public ItemDto partialUpdate(int id, Map<String, String> updates, int userId) {
+    public ItemReturnDto partialUpdate(int id, Map<String, String> updates, int userId) {
         User applicant = userRepository.findById(userId)
                 .orElseThrow(() -> new NotFoundUserException(String.format("User with id = %d not found", userId)));
 
@@ -116,7 +135,7 @@ public class ItemServiceImpl implements ItemService {
             }
         });
 
-        return itemMapper.itemToItemDto(
+        return itemMapper.itemToItemReturnDto(
                 itemRepository.save(item));
     }
 
@@ -128,15 +147,23 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
-    public List<ItemDto> searchItems(String text, int userId) {
+    public List<ItemReturnDto> searchItems(String text, int userId, Integer from, Integer size) {
         findUser(userId);
 
         if (text.isEmpty()) {
             return new ArrayList<>();
         }
 
-        return itemRepository.search(text).stream()
-                .map(itemMapper::itemToItemDto)
+        Pageable pageable;
+        if (size == null) {
+            pageable = PageRequest.of(0, Integer.MAX_VALUE);
+        } else {
+            pageable = PageRequest.of(from / size, size);
+        }
+
+        return itemRepository.search(text, pageable)
+                .stream()
+                .map(itemMapper::itemToItemReturnDto)
                 .collect(Collectors.toList());
     }
 

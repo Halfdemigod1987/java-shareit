@@ -3,6 +3,7 @@ package ru.practicum.shareit.item.controllers;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.item.dto.CommentDto;
 import ru.practicum.shareit.item.dto.CommentReturnDto;
@@ -11,19 +12,23 @@ import ru.practicum.shareit.item.dto.ItemReturnDto;
 import ru.practicum.shareit.item.services.ItemService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Min;
 import java.util.List;
 import java.util.Map;
 
 @RestController
 @RequestMapping("/items")
 @RequiredArgsConstructor
+@Validated
 public class ItemController {
     private final ItemService itemService;
 
     @GetMapping
     public ResponseEntity<List<ItemReturnDto>> findAllItems(
+            @RequestParam(required = false) @Min(0) Integer from,
+            @RequestParam(required = false) @Min(1) Integer size,
             @RequestHeader(value = "X-Sharer-User-Id") int userId) {
-        return ResponseEntity.ok(itemService.findAllItems(userId));
+        return ResponseEntity.ok(itemService.findAllItems(userId, from, size));
     }
 
     @GetMapping("/{id}")
@@ -34,7 +39,7 @@ public class ItemController {
     }
 
     @PostMapping
-    public ResponseEntity<ItemDto> createItem(
+    public ResponseEntity<ItemReturnDto> createItem(
             @Valid @RequestBody ItemDto itemDto,
             @RequestHeader(value = "X-Sharer-User-Id") int userId) {
         return ResponseEntity
@@ -43,7 +48,7 @@ public class ItemController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<ItemDto> updateItem(
+    public ResponseEntity<ItemReturnDto> updateItem(
             @PathVariable int id,
             @RequestBody Map<String, String> updates,
             @RequestHeader(value = "X-Sharer-User-Id") int userId) {
@@ -56,10 +61,12 @@ public class ItemController {
     }
 
     @GetMapping("/search")
-    public ResponseEntity<List<ItemDto>> searchItems(
+    public ResponseEntity<List<ItemReturnDto>> searchItems(
             @RequestParam(value = "text") String text,
+            @RequestParam(required = false) @Min(0) Integer from,
+            @RequestParam(required = false) @Min(1) Integer size,
             @RequestHeader(value = "X-Sharer-User-Id") int userId) {
-        return ResponseEntity.ok(itemService.searchItems(text, userId));
+        return ResponseEntity.ok(itemService.searchItems(text, userId, from, size));
     }
 
     @PostMapping("/{itemId}/comment")

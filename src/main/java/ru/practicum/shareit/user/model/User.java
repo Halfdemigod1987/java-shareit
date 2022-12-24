@@ -1,7 +1,6 @@
 package ru.practicum.shareit.user.model;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import ru.practicum.shareit.booking.model.Booking;
 import ru.practicum.shareit.item.model.Comment;
 import ru.practicum.shareit.item.model.Item;
@@ -13,7 +12,10 @@ import java.util.Set;
 @Entity
 @Table(name = "users")
 @Data
+@Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@AllArgsConstructor
+@NoArgsConstructor
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -29,5 +31,6 @@ public class User {
     @OneToMany(mappedBy = "author")
     private Set<Comment> comments;
     @OneToMany(mappedBy = "owner")
+    @ToString.Exclude
     private Set<Item> items;
 }

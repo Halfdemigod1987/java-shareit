@@ -9,17 +9,17 @@ import java.util.List;
 import java.util.Map;
 
 public interface ItemService {
-    List<ItemReturnDto> findAllItems(int userId);
+    List<ItemReturnDto> findAllItems(int userId, Integer from, Integer size);
 
     ItemReturnDto findItemById(int id, int userId);
 
-    ItemDto createItem(ItemDto itemDto, int userId);
+    ItemReturnDto createItem(ItemDto itemDto, int userId);
 
-    ItemDto partialUpdate(int id, Map<String, String> updates, int userId);
+    ItemReturnDto partialUpdate(int id, Map<String, String> updates, int userId);
 
     void deleteItem(int id);
 
-    List<ItemDto> searchItems(String text, int userId);
+    List<ItemReturnDto> searchItems(String text, int userId, Integer from, Integer size);
 
     CommentReturnDto createComment(int itemId, CommentDto commentDto, int userId);
 }

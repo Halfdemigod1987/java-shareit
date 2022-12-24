@@ -1,6 +1,7 @@
 package ru.practicum.shareit.item.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.extern.jackson.Jacksonized;
 import ru.practicum.shareit.booking.dto.BookingItemReturnDto;
@@ -10,6 +11,7 @@ import javax.validation.constraints.NotNull;
 import java.util.List;
 
 @Data
+@Builder
 @AllArgsConstructor
 @Jacksonized
 public class ItemReturnDto {
@@ -24,4 +26,5 @@ public class ItemReturnDto {
     private BookingItemReturnDto nextBooking;
     private List<CommentReturnDto> comments;
     private int ownerId;
+    private int requestId;
 }
