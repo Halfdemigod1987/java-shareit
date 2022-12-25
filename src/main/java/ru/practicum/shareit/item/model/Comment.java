@@ -1,7 +1,6 @@
 package ru.practicum.shareit.item.model;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
+import lombok.*;
 import ru.practicum.shareit.user.model.User;
 
 import javax.persistence.*;
@@ -10,7 +9,10 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "comments")
 @Data
+@Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@AllArgsConstructor
+@NoArgsConstructor
 public class Comment {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

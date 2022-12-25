@@ -9,13 +9,14 @@ import ru.practicum.shareit.booking.exceptions.NotFoundBookingException;
 import ru.practicum.shareit.booking.exceptions.UnsupportedBookingStatusException;
 import ru.practicum.shareit.item.exceptions.NotFoundItemException;
 import ru.practicum.shareit.item.exceptions.NotOwnerException;
+import ru.practicum.shareit.request.exceptions.NotFoundItemRequestException;
 import ru.practicum.shareit.user.dto.ErrorResponse;
 import ru.practicum.shareit.user.exceptions.NotFoundUserException;
 
 @RestControllerAdvice
 public class ErrorHandler {
     @ExceptionHandler
-    public ResponseEntity<ErrorResponse> handleNotFoundException(final NotFoundItemException e) {
+    public ResponseEntity<ErrorResponse> handleNotFoundItemException(final NotFoundItemException e) {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(new ErrorResponse(String.format("Validation error: %s", e.getMessage())));
@@ -29,14 +30,14 @@ public class ErrorHandler {
     }
 
     @ExceptionHandler
-    public ResponseEntity<ErrorResponse> handleNotFoundException(final NotFoundUserException e) {
+    public ResponseEntity<ErrorResponse> handleNotFoundUseException(final NotFoundUserException e) {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(new ErrorResponse(String.format("Validation error: %s", e.getMessage())));
     }
 
     @ExceptionHandler
-    public ResponseEntity<ErrorResponse> handleNotFoundException(final NotFoundBookingException e) {
+    public ResponseEntity<ErrorResponse> handleNotFoundBookingException(final NotFoundBookingException e) {
         return ResponseEntity
                 .status(HttpStatus.NOT_FOUND)
                 .body(new ErrorResponse(String.format("Validation error: %s", e.getMessage())));
@@ -62,5 +63,13 @@ public class ErrorHandler {
                 .status(HttpStatus.BAD_REQUEST)
                 .body(new ErrorResponse(e.getMessage()));
     }
+
+    @ExceptionHandler
+    public ResponseEntity<ErrorResponse> handleNotFoundItemRequestException(final NotFoundItemRequestException e) {
+        return ResponseEntity
+                .status(HttpStatus.NOT_FOUND)
+                .body(new ErrorResponse(e.getMessage()));
+    }
+
 
 }

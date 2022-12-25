@@ -1,8 +1,6 @@
 package ru.practicum.shareit.booking.model;
 
-import lombok.Data;
-import lombok.EqualsAndHashCode;
-import lombok.NoArgsConstructor;
+import lombok.*;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.user.model.User;
 
@@ -12,7 +10,9 @@ import java.time.LocalDateTime;
 @Entity
 @Table(name = "bookings")
 @Data
+@Builder
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
+@AllArgsConstructor
 @NoArgsConstructor
 public class Booking {
     @Id
@@ -32,15 +32,6 @@ public class Booking {
     @Enumerated(EnumType.STRING)
     @Column(name = "status")
     private BookingStatus status;
-
-    public Booking(int id, LocalDateTime start, LocalDateTime end, Item item, User booker, BookingStatus status) {
-        this.id = id;
-        this.start = start;
-        this.end = end;
-        this.item = item;
-        this.booker = booker;
-        this.status = status;
-    }
 
     public void setBooker(User booker) {
         this.booker = booker;
