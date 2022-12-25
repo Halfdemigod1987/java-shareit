@@ -56,8 +56,9 @@ public class ItemController {
     }
 
     @DeleteMapping("/{id}")
-    public void deleteItem(@PathVariable int id) {
+    public ResponseEntity<Void> deleteItem(@PathVariable int id) {
         itemService.deleteItem(id);
+        return new ResponseEntity<>(HttpStatus.OK);
     }
 
     @GetMapping("/search")

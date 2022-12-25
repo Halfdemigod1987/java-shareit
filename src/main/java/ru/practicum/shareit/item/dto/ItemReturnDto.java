@@ -15,7 +15,7 @@ import java.util.List;
 @AllArgsConstructor
 @Jacksonized
 public class ItemReturnDto {
-    int id;
+    private int id;
     @NotBlank
     private String name;
     @NotBlank

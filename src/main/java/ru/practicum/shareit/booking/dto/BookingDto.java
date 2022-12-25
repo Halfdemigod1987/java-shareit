@@ -13,7 +13,9 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Jacksonized
 public class BookingDto {
-    @FutureOrPresent LocalDateTime start;
-    @FutureOrPresent LocalDateTime end;
+    @FutureOrPresent
+    LocalDateTime start;
+    @FutureOrPresent
+    LocalDateTime end;
     int itemId;
 }
