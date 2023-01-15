@@ -16,14 +16,13 @@ import java.util.List;
 @RestController
 @RequestMapping(path = "/bookings")
 @RequiredArgsConstructor
-@Validated
 public class BookingController {
 
     private final BookingService bookingService;
 
     @PostMapping
     public ResponseEntity<BookingReturnDto> createBooking(
-            @Valid @RequestBody BookingDto booking,
+            @RequestBody BookingDto booking,
             @RequestHeader(value = "X-Sharer-User-Id") int userId) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -41,8 +40,8 @@ public class BookingController {
     @GetMapping
     public ResponseEntity<List<BookingReturnDto>> findAllBookings(
             @RequestParam(value = "state", required = false, defaultValue = "ALL") String state,
-            @RequestParam(required = false) @Min(0) Integer from,
-            @RequestParam(required = false) @Min(1) Integer size,
+            @RequestParam(required = false) Integer from,
+            @RequestParam(required = false) Integer size,
             @RequestHeader(value = "X-Sharer-User-Id") int userId) {
         return ResponseEntity.ok(bookingService.findAllBookings(state, userId, from, size));
     }
@@ -50,8 +49,8 @@ public class BookingController {
     @GetMapping("/owner")
     public ResponseEntity<List<BookingReturnDto>> findAllOwnerBookings(
             @RequestParam(value = "state", required = false, defaultValue = "ALL") String state,
-            @RequestParam(required = false) @Min(0) Integer from,
-            @RequestParam(required = false) @Min(1) Integer size,
+            @RequestParam(required = false) Integer from,
+            @RequestParam(required = false) Integer size,
             @RequestHeader(value = "X-Sharer-User-Id") int userId) {
         return ResponseEntity.ok(bookingService.findAllOwnerBookings(state, userId, from, size));
     }
