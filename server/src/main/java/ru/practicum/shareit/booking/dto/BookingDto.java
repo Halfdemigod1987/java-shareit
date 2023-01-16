@@ -5,7 +5,6 @@ import lombok.Builder;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 
-import javax.validation.constraints.FutureOrPresent;
 import java.time.LocalDateTime;
 
 @Value
@@ -13,9 +12,7 @@ import java.time.LocalDateTime;
 @AllArgsConstructor
 @Jacksonized
 public class BookingDto {
-    @FutureOrPresent
     LocalDateTime start;
-    @FutureOrPresent
     LocalDateTime end;
     int itemId;
 }

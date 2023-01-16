@@ -49,11 +49,11 @@ public class BookingClient extends BaseClient {
         return post("", userId, requestDto);
     }
 
-    public ResponseEntity<Object> findBookingById(long userId, Long bookingId) {
+    public ResponseEntity<Object> findBookingById(int userId, int bookingId) {
         return get("/" + bookingId, userId);
     }
 
-    public ResponseEntity<Object> changeBookingStatus(int userId, int bookingId) {
-        return patch("/" + bookingId, userId, null);
+    public ResponseEntity<Object> changeBookingStatus(int userId, int bookingId, boolean approved) {
+        return patch("/" + bookingId + "?approved=" + approved, userId, null);
     }
 }

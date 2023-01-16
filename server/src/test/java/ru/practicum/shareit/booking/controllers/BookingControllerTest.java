@@ -135,6 +135,7 @@ class BookingControllerTest {
                                 .build()));
 
         mvc.perform(get("/bookings")
+                        .param("state", "ALL")
                         .header("X-Sharer-User-Id", "1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(3)))
@@ -182,6 +183,7 @@ class BookingControllerTest {
                                 .build()));
 
         mvc.perform(get("/bookings/owner")
+                        .param("state", "ALL")
                         .header("X-Sharer-User-Id", "1"))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$", hasSize(3)))

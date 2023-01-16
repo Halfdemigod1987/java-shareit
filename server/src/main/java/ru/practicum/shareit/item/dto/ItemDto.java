@@ -5,17 +5,14 @@ import lombok.Builder;
 import lombok.Value;
 import lombok.extern.jackson.Jacksonized;
 
-import javax.validation.constraints.NotBlank;
-import javax.validation.constraints.NotNull;
-
 @Value
 @Builder
 @AllArgsConstructor
 @Jacksonized
 public class ItemDto {
     int id;
-    @NotBlank String name;
-    @NotBlank String description;
-    @NotNull Boolean available;
+    String name;
+    String description;
+    Boolean available;
     Integer requestId;
 }

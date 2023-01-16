@@ -11,8 +11,6 @@ import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.dto.ItemReturnDto;
 import ru.practicum.shareit.item.services.ItemService;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Min;
 import java.util.List;
 import java.util.Map;
 
@@ -25,8 +23,8 @@ public class ItemController {
 
     @GetMapping
     public ResponseEntity<List<ItemReturnDto>> findAllItems(
-            @RequestParam(required = false) @Min(0) Integer from,
-            @RequestParam(required = false) @Min(1) Integer size,
+            @RequestParam(required = false) Integer from,
+            @RequestParam(required = false) Integer size,
             @RequestHeader(value = "X-Sharer-User-Id") int userId) {
         return ResponseEntity.ok(itemService.findAllItems(userId, from, size));
     }
@@ -40,7 +38,7 @@ public class ItemController {
 
     @PostMapping
     public ResponseEntity<ItemReturnDto> createItem(
-            @Valid @RequestBody ItemDto itemDto,
+            @RequestBody ItemDto itemDto,
             @RequestHeader(value = "X-Sharer-User-Id") int userId) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
@@ -63,9 +61,9 @@ public class ItemController {
 
     @GetMapping("/search")
     public ResponseEntity<List<ItemReturnDto>> searchItems(
-            @RequestParam(value = "text") String text,
-            @RequestParam(required = false) @Min(0) Integer from,
-            @RequestParam(required = false) @Min(1) Integer size,
+            @RequestParam String text,
+            @RequestParam(required = false) Integer from,
+            @RequestParam(required = false) Integer size,
             @RequestHeader(value = "X-Sharer-User-Id") int userId) {
         return ResponseEntity.ok(itemService.searchItems(text, userId, from, size));
     }
@@ -73,7 +71,7 @@ public class ItemController {
     @PostMapping("/{itemId}/comment")
     public ResponseEntity<CommentReturnDto> createComment(
             @PathVariable int itemId,
-            @Valid @RequestBody CommentDto comment,
+            @RequestBody CommentDto comment,
             @RequestHeader(value = "X-Sharer-User-Id") int userId) {
         return ResponseEntity.ok(itemService.createComment(itemId, comment, userId));
     }

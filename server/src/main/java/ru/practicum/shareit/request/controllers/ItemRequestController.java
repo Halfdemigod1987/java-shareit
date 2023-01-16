@@ -8,8 +8,6 @@ import ru.practicum.shareit.request.dto.ItemRequestDto;
 import ru.practicum.shareit.request.dto.ItemRequestReturnDto;
 import ru.practicum.shareit.request.services.ItemRequestService;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Min;
 import java.util.List;
 
 @RestController
@@ -22,7 +20,7 @@ public class ItemRequestController {
 
     @PostMapping
     public ResponseEntity<ItemRequestReturnDto> createItemRequest(
-            @Valid @RequestBody ItemRequestDto itemRequest,
+            @RequestBody ItemRequestDto itemRequest,
             @RequestHeader(value = "X-Sharer-User-Id") int userId) {
         return ResponseEntity.ok(itemRequestService.createItemRequest(itemRequest, userId));
     }
@@ -35,8 +33,8 @@ public class ItemRequestController {
 
     @GetMapping("/all")
     public ResponseEntity<List<ItemRequestReturnDto>> findAllRequests(
-            @RequestParam(required = false) @Min(0) Integer from,
-            @RequestParam(required = false) @Min(1) Integer size,
+            @RequestParam(required = false) Integer from,
+            @RequestParam(required = false) Integer size,
             @RequestHeader(value = "X-Sharer-User-Id") int userId) {
         return ResponseEntity.ok(itemRequestService.findAllRequests(userId, from, size));
     }
