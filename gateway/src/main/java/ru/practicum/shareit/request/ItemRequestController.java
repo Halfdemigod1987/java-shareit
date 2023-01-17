@@ -22,14 +22,14 @@ public class ItemRequestController {
     @PostMapping
     public ResponseEntity<Object> createItemRequest(
             @Valid @RequestBody ItemRequestDto itemRequest,
-            @RequestHeader(value = "X-Sharer-User-Id") int userId) {
+            @RequestHeader(value = "X-Sharer-User-Id") Long userId) {
         log.info("Creating item request {}, userId={}", itemRequest, userId);
         return itemRequestClient.createItemRequest(userId, itemRequest);
     }
 
     @GetMapping
     public ResponseEntity<Object> findRequests(
-            @RequestHeader(value = "X-Sharer-User-Id") int userId) {
+            @RequestHeader(value = "X-Sharer-User-Id") Long userId) {
         log.info("Get item requests with userId={}", userId);
         return itemRequestClient.findRequests(userId);
     }
@@ -45,8 +45,8 @@ public class ItemRequestController {
 
     @GetMapping("/{requestId}")
     public ResponseEntity<Object> findRequestById(
-            @PathVariable int requestId,
-            @RequestHeader(value = "X-Sharer-User-Id") int userId) {
+            @PathVariable Integer requestId,
+            @RequestHeader(value = "X-Sharer-User-Id") Long userId) {
         log.info("Get item request {}, userId={}", requestId, userId);
         return itemRequestClient.findRequestById(userId, requestId);
     }

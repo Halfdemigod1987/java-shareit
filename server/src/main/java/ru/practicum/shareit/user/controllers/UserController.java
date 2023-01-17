@@ -22,7 +22,7 @@ public class UserController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<UserDto> findUserById(@PathVariable int id) {
+    public ResponseEntity<UserDto> findUserById(@PathVariable Integer id) {
         return ResponseEntity.ok(userService.findUserById(id));
     }
 
@@ -34,14 +34,14 @@ public class UserController {
     }
 
     @PatchMapping("/{id}")
-    public ResponseEntity<UserDto> updateUser(@PathVariable int id, @RequestBody Map<String, String> updates) {
+    public ResponseEntity<UserDto> updateUser(@PathVariable Integer id, @RequestBody Map<String, String> updates) {
         return ResponseEntity
                 .status(HttpStatus.OK)
                 .body(userService.partialUpdate(id, updates));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable int id) {
+    public ResponseEntity<Void> deleteUser(@PathVariable Integer id) {
         userService.deleteUser(id);
         return new ResponseEntity<>(HttpStatus.OK);
     }

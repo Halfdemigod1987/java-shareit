@@ -6,7 +6,6 @@ import org.springframework.boot.web.client.RestTemplateBuilder;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
-import org.springframework.web.bind.annotation.*;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import ru.practicum.shareit.client.BaseClient;
 import ru.practicum.shareit.request.dto.ItemRequestDto;
@@ -28,11 +27,11 @@ public class ItemRequestClient extends BaseClient {
         );
     }
 
-    public ResponseEntity<Object> createItemRequest(int userId, ItemRequestDto itemRequest) {
+    public ResponseEntity<Object> createItemRequest(Long userId, ItemRequestDto itemRequest) {
         return post("", userId, itemRequest);
     }
 
-    public ResponseEntity<Object> findRequests(int userId) {
+    public ResponseEntity<Object> findRequests(Long userId) {
         return get("", userId);
     }
 
@@ -48,7 +47,7 @@ public class ItemRequestClient extends BaseClient {
         }
     }
 
-    public ResponseEntity<Object> findRequestById(int userId, int requestId) {
+    public ResponseEntity<Object> findRequestById(Long userId, Integer requestId) {
         return get("/" + requestId, userId);
     }
 }

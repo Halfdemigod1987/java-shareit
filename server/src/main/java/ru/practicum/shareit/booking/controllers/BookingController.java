@@ -20,7 +20,7 @@ public class BookingController {
     @PostMapping
     public ResponseEntity<BookingReturnDto> createBooking(
             @RequestBody BookingDto booking,
-            @RequestHeader(value = "X-Sharer-User-Id") int userId) {
+            @RequestHeader(value = "X-Sharer-User-Id") Integer userId) {
         return ResponseEntity
                 .status(HttpStatus.CREATED)
                 .body(bookingService.createBooking(booking, userId));
@@ -28,9 +28,9 @@ public class BookingController {
 
     @PatchMapping("/{bookingId}")
     public ResponseEntity<BookingReturnDto> changeBookingStatus(
-            @PathVariable int bookingId,
+            @PathVariable Integer bookingId,
             @RequestParam(value = "approved") boolean approved,
-            @RequestHeader(value = "X-Sharer-User-Id") int userId) {
+            @RequestHeader(value = "X-Sharer-User-Id") Integer userId) {
         return ResponseEntity.ok(bookingService.changeBookingStatus(bookingId, approved, userId));
     }
 
@@ -39,7 +39,7 @@ public class BookingController {
             @RequestParam String state,
             @RequestParam(required = false) Integer from,
             @RequestParam(required = false) Integer size,
-            @RequestHeader(value = "X-Sharer-User-Id") int userId) {
+            @RequestHeader(value = "X-Sharer-User-Id") Integer userId) {
         return ResponseEntity.ok(bookingService.findAllBookings(state, userId, from, size));
     }
 
@@ -48,14 +48,14 @@ public class BookingController {
             @RequestParam String state,
             @RequestParam(required = false) Integer from,
             @RequestParam(required = false) Integer size,
-            @RequestHeader(value = "X-Sharer-User-Id") int userId) {
+            @RequestHeader(value = "X-Sharer-User-Id") Integer userId) {
         return ResponseEntity.ok(bookingService.findAllOwnerBookings(state, userId, from, size));
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<BookingReturnDto> findBookingById(
-            @PathVariable int id,
-            @RequestHeader(value = "X-Sharer-User-Id") int userId) {
+            @PathVariable Integer id,
+            @RequestHeader(value = "X-Sharer-User-Id") Integer userId) {
         return ResponseEntity.ok(bookingService.findBookingById(id, userId));
     }
 

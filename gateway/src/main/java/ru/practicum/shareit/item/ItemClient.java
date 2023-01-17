@@ -39,19 +39,19 @@ public class ItemClient extends BaseClient {
         }
     }
 
-    public ResponseEntity<Object> findItemById(int userId, int itemId) {
+    public ResponseEntity<Object> findItemById(Long userId, Integer itemId) {
         return get("/" + itemId, userId);
     }
 
-    public ResponseEntity<Object> createItem(int userId, ItemDto itemDto) {
+    public ResponseEntity<Object> createItem(Long userId, ItemDto itemDto) {
         return post("", userId, itemDto);
     }
 
-    public ResponseEntity<Object> updateItem(int userId, int itemId, Map<String, String> updates) {
+    public ResponseEntity<Object> updateItem(Long userId, Integer itemId, Map<String, String> updates) {
         return patch("/" + itemId, userId, updates);
     }
 
-    public ResponseEntity<Object> deleteItem(int userId, int itemId) {
+    public ResponseEntity<Object> deleteItem(Long userId, Integer itemId) {
         return delete("/" + itemId, userId);
     }
 
@@ -67,7 +67,7 @@ public class ItemClient extends BaseClient {
         }
     }
 
-    public ResponseEntity<Object> createComment(int userId, int itemId, CommentDto comment) {
+    public ResponseEntity<Object> createComment(Long userId, Integer itemId, CommentDto comment) {
         return post("/" + itemId + "/comment", userId, comment);
     }
 }

@@ -30,7 +30,7 @@ public class UserClient extends BaseClient {
         return get("");
     }
 
-    public ResponseEntity<Object> findUserById(int userId) {
+    public ResponseEntity<Object> findUserById(Long userId) {
         return get("/" + userId);
     }
 
@@ -38,11 +38,11 @@ public class UserClient extends BaseClient {
         return post("", userDto);
     }
 
-    public ResponseEntity<Object> updateUser(int userId, Map<String, String> updates) {
+    public ResponseEntity<Object> updateUser(Long userId, Map<String, String> updates) {
         return patch("/" + userId, updates);
     }
 
-    public ResponseEntity<Object> deleteUser(int userId) {
+    public ResponseEntity<Object> deleteUser(Long userId) {
         return delete("/" + userId);
     }
 

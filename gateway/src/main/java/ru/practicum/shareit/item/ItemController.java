@@ -32,8 +32,8 @@ public class ItemController {
 
     @GetMapping("/{itemId}")
     public ResponseEntity<Object> findItemById(
-            @PathVariable int itemId,
-            @RequestHeader(value = "X-Sharer-User-Id") int userId) {
+            @PathVariable Integer itemId,
+            @RequestHeader(value = "X-Sharer-User-Id") Long userId) {
         log.info("Get item {}, userId={}", itemId, userId);
         return itemClient.findItemById(userId, itemId);
     }
@@ -41,24 +41,24 @@ public class ItemController {
     @PostMapping
     public ResponseEntity<Object> createItem(
             @Valid @RequestBody ItemDto itemDto,
-            @RequestHeader(value = "X-Sharer-User-Id") int userId) {
+            @RequestHeader(value = "X-Sharer-User-Id") Long userId) {
         log.info("Creating item {}, userId={}", itemDto, userId);
         return itemClient.createItem(userId, itemDto);
     }
 
     @PatchMapping("/{itemId}")
     public ResponseEntity<Object> updateItem(
-            @PathVariable int itemId,
+            @PathVariable Integer itemId,
             @RequestBody Map<String, String> updates,
-            @RequestHeader(value = "X-Sharer-User-Id") int userId) {
+            @RequestHeader(value = "X-Sharer-User-Id") Long userId) {
         log.info("Updating item {}, {}", userId, updates);
         return itemClient.updateItem(userId, itemId, updates);
     }
 
     @DeleteMapping("/{itemId}")
     public ResponseEntity<Object> deleteItem(
-            @PathVariable int itemId,
-            @RequestHeader(value = "X-Sharer-User-Id") int userId) {
+            @PathVariable Integer itemId,
+            @RequestHeader(value = "X-Sharer-User-Id") Long userId) {
         log.info("Deleting item {}", userId);
         return itemClient.deleteItem(userId, itemId);
     }
@@ -75,9 +75,9 @@ public class ItemController {
 
     @PostMapping("/{itemId}/comment")
     public ResponseEntity<Object> createComment(
-            @PathVariable int itemId,
+            @PathVariable Integer itemId,
             @Valid @RequestBody CommentDto comment,
-            @RequestHeader(value = "X-Sharer-User-Id") int userId) {
+            @RequestHeader(value = "X-Sharer-User-Id") Long userId) {
         log.info("Creating comment {}, itemId={}, userId={}", comment, itemId, userId);
         return itemClient.createComment(userId, itemId, comment);
     }
